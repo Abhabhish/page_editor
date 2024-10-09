@@ -1,0 +1,34 @@
+{% extends "base.html" %} {% load humanize %} {% block pageContent %}
+
+<!--Section: Content-->
+<section class="text">
+    <h1 class="mb-5"><strong><center>Sections</center></strong></h4>
+
+        <div class="container">
+            {% for section in sections %}
+            <div class="row align-items-center mb-3 p-2 border shadow-sm">
+                <!-- Left: Section logo -->
+                <div class="col-auto">
+                    <a href="{% url 'section_view' section_id=section.id %}">
+                        <img src="{{ section.theme.url }}" alt="Logo" class="img-fluid" style="width: 250px; height: auto;" />
+                    </a>
+                </div>
+                
+                <!-- Middle: Section title -->
+                <div class="col">
+                    <h5 class="mb-0"><strong>{{ section.title }}</strong></h5>
+                </div>
+                
+                <!-- Right: Edit and Delete buttons -->
+                <div class="col-auto">
+                    <a href="{% url 'edit-section' pk=section.id %}" class="btn btn-primary btn-sm me-2">Edit</a>
+                    <a href="{% url 'delete-section' section.id %}" class="btn btn-danger btn-sm">Delete</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+</section>
+
+
+</div> {% endblock pageContent %}

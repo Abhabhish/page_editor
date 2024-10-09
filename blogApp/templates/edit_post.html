@@ -1,0 +1,225 @@
+{% extends 'base.html' %} {% load static %}{% block headerContent %}
+<link rel="stylesheet" href="{% static 'blogApp/assets/summernote/summernote-lite.min.css' %}">
+<script src="{% static 'blogApp/assets/summernote/summernote-lite.min.js' %}"></script>
+{% endblock headerContent %} {% block pageContent %}
+
+<div class="btn-group" role="group" aria-label="Language selection">
+    <a href="{% url 'edit-post' pk=pk lang='English' %}" class="btn btn{% if selected_language == 'English' %}-outline{% endif %}-primary">English</a>
+    <a href="{% url 'edit-post' pk=pk lang='Hindi' %}" class="btn btn{% if selected_language == 'Hindi' %}-outline{% endif %}-primary">Hindi</a>
+    <a href="{% url 'edit-post' pk=pk lang='Bengali' %}" class="btn btn{% if selected_language == 'Bengali' %}-outline{% endif %}-primary">Bengali</a>
+    <a href="{% url 'edit-post' pk=pk lang='Tamil' %}" class="btn btn{% if selected_language == 'Tamil' %}-outline{% endif %}-primary">Tamil</a>
+    <a href="{% url 'edit-post' pk=pk lang='Marathi' %}" class="btn btn{% if selected_language == 'Marathi' %}-outline{% endif %}-primary">Marathi</a>
+</div>
+
+
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="row justify-content-center">
+        <div class=" col-lg-12 col-md-12 col-sm-12 col-xs-12 card card-default rounded-0 shadow">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="card-title fw-bold">Update Post Details</h4>
+                {% if selected_language != "English" %}
+                <a href="{% url 'edit-post' pk=pk lang=selected_language tr='Translate' %}" class="btn btn-primary">Get Translation Again</a>
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <form action="" id="post-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{ pk }}">
+                    <input type="hidden" name="lang" value="{{ selected_language }}">
+
+                    <div class="form-group mb-3">
+                        <label for="page_name" class="control-label">Page Name</label>
+                        <input type="text" class="form-control rounded-0" id="page_name" name="page_name" value="{{post.page_name}}" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="page_title" class="control-label">Page Title</label>
+                        <input type="text" class="form-control rounded-0" id="page_title" name="page_title" value="{{post.page_title}}" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="side_panel" class="control-label">Side Panel Json</label>
+                        <textarea class="form-control rounded-0" name="side_panel" id="side_panel" rows="10" required>{{post.side_panel}}</textarea>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="map_image" class="control-label">Map Image</label>
+                        <textarea class="form-control rounded-0" name="map_image" id="map_image" rows="10" required>{{post.map_image}}</textarea>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="body_content" class="control-label">Body Content</label>
+                        <textarea class="form-control rounded-0" name="body_content" id="body_content" rows="10" required>{{post.body_content}}</textarea>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="static_table" class="control-label">Static Table</label>
+                        <textarea class="form-control rounded-0" name="static_table" id="static_table" rows="10" required>{{post.static_table}}</textarea>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="dynamic_table" class="control-label">Dynamic Table</label>
+                        <textarea class="form-control rounded-0" name="dynamic_table" id="dynamic_table" rows="10" required>{{post.dynamic_table}}</textarea>
+                    </div>
+
+                    <br>
+                    <h4 class="fw-bold">SEO Attributes</h4>
+                    <hr><br>
+
+                    <div class="form-group mb-3">
+                        <label for="meta_name_description" class="control-label">meta_name_description</label>
+                        <input type="text" class="form-control rounded-0" id="meta_name_description" name="meta_name_description" value="{{post.seo_attributes.meta_name_description}}">
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="meta_name_keywords" class="control-label">meta_name_keywords</label>
+                        <input type="text" class="form-control rounded-0" id="meta_name_keywords" name="meta_name_keywords" value="{{post.seo_attributes.meta_name_keywords}}">
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="meta_property_og_title" class="control-label">meta_property_og_title</label>
+                        <input type="text" class="form-control rounded-0" id="meta_property_og_title" name="meta_property_og_title" value="{{post.seo_attributes.meta_property_og_title}}">
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="meta_property_og_url" class="control-label">meta_property_og_url</label>
+                        <input type="text" class="form-control rounded-0" id="meta_property_og_url" name="meta_property_og_url" value="{{post.seo_attributes.meta_property_og_url}}" >
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="meta_property_og_description" class="control-label">meta_property_og_description</label>
+                        <input type="text" class="form-control rounded-0" id="meta_property_og_description" name="meta_property_og_description" value="{{post.seo_attributes.meta_property_og_description}}" >
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="meta_property_og_image" class="control-label">meta_property_og_image</label>
+                        <input type="text" class="form-control rounded-0" id="meta_property_og_image" name="meta_property_og_image" value="{{post.seo_attributes.meta_property_og_image}}" >
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="meta_name_twitter_card" class="control-label">meta_name_twitter_card</label>
+                        <input type="text" class="form-control rounded-0" id="meta_name_twitter_card" name="meta_name_twitter_card" value="{{post.seo_attributes.meta_name_twitter_card}}" >
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="meta_name_twitter_site" class="control-label">meta_name_twitter_site</label>
+                        <input type="text" class="form-control rounded-0" id="meta_name_twitter_site" name="meta_name_twitter_site" value="{{post.seo_attributes.meta_name_twitter_site}}" >
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="meta_name_twitter_title" class="control-label">meta_name_twitter_title</label>
+                        <input type="text" class="form-control rounded-0" id="meta_name_twitter_title" name="meta_name_twitter_title" value="{{post.seo_attributes.meta_name_twitter_title}}" >
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="meta_name_twitter_description" class="control-label">meta_name_twitter_description</label>
+                        <input type="text" class="form-control rounded-0" id="meta_name_twitter_description" name="meta_name_twitter_description" value="{{post.seo_attributes.meta_name_twitter_description}}" >
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="meta_name_twitter_image_src" class="control-label">meta_name_twitter_image_src</label>
+                        <input type="text" class="form-control rounded-0" id="meta_name_twitter_image_src" name="meta_name_twitter_image_src" value="{{post.seo_attributes.meta_name_twitter_image_src}}" >
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="meta_name_viewport" class="control-label">meta_name_viewport</label>
+                        <input type="text" class="form-control rounded-0" id="meta_name_viewport" name="meta_name_viewport" value="{{post.seo_attributes.meta_name_viewport}}" >
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="canonical_url" class="control-label">canonical_url</label>
+                        <input type="text" class="form-control rounded-0" id="canonical_url" name="canonical_url" value="{{post.seo_attributes.canonical_url}}" >
+                    </div>
+                    
+                </form>
+            </div>
+            <div class="card-footer">
+                <div class="d-flex w-100 justify-content-end">
+                    <button class="btn btn-sm btn-primary bg-gradient me-2 rounded-0" form="post-form"><i class="fa fa-save"></i> Save</button>
+                    <a class="btn btn-sm btn-light bg-gradient border rounded-0" href="{% url 'folder_view' folder.id %}"><i class="fa fa-angle-left"></i> Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock pageContent %} {% block ScriptBlock %}
+<script>
+    function DisplayImage(input) {
+        console.log(input.files)
+        if (event.target.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function() {
+                var output = $('#post-banner-mgt');
+                output.attr('src', reader.result)
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+
+    };
+    $(function() {
+        $('.summernote').summernote({
+            placeholder: 'Write your blog content/article here',
+            tabsize: 2,
+            height: "45vh",
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']]
+            ]
+        });
+        
+        $('#post-form').submit(function(e) {
+            e.preventDefault();
+            var _this = $(this)
+            $('.err-msg').remove();
+            var el = $('<div>')
+            el.addClass("alert alert-danger err-msg")
+            el.hide()
+            if (_this[0].checkValidity() == false) {
+                _this[0].reportValidity();
+                return false;
+            }
+            start_loader();
+            $.ajax({
+                headers: {
+                    "X-CSRFToken": '{{csrf_token}}'
+                },
+                url: "{% url 'save-post' %}",
+                data: new FormData($(this)[0]),
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                dataType: 'json',
+                error: err => {
+                    console.log(err)
+                    alert_toast("An error occured", 'error');
+                    end_loader();
+                },
+                success: function(resp) {
+                    if (typeof resp == 'object' && resp.status == 'success') {
+                        el.removeClass("alert alert-danger err-msg")
+                        location.replace(`/edit_post/{{selected_language}}/{{pk}}`);
+                    } else if (resp.status == 'failed' && !!resp.msg) {
+                        el.html(resp.msg)
+                    } else {
+                        el.text("An error occured", 'error');
+                        end_loader();
+                        console.err(resp)
+                    }
+                    _this.prepend(el)
+                    el.show('slow')
+                    $("html, body, .modal").scrollTop(0);
+                    end_loader()
+                }
+            })
+        })
+    })
+</script>
+{% endblock ScriptBlock %}

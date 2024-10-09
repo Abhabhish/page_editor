@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Item List</title>
+    <style>
+        .container {
+            width: 100%;
+            margin: 20px;
+        }
+
+        .item-box {
+            display: flex;
+            flex-wrap: wrap;
+            border: 2px solid #ccc;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .item {
+            width: 150px;
+            margin-right: 20px;
+            margin-bottom: 20px;
+        }
+
+        .item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .item-title {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .form-container {
+            display: none;
+            margin-bottom: 20px;
+        }
+
+        .form-container.active {
+            display: block;
+        }
+
+        button {
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <button id="addItemBtn">Add Item</button>
+
+    <div class="form-container" id="formContainer">
+        <input type="file" id="imageInput"><br><br>
+        <input type="text" id="titleInput" placeholder="Enter title"><br><br>
+        <button id="saveBtn">Save</button>
+    </div>
+
+    <div class="item-box" id="itemBox">
+        <!-- Items will be appended here -->
+    </div>
+</div>
+
+<script>
+    const addItemBtn = document.getElementById('addItemBtn');
+    const formContainer = document.getElementById('formContainer');
+    const saveBtn = document.getElementById('saveBtn');
+    const imageInput = document.getElementById('imageInput');
+    const titleInput = document.getElementById('titleInput');
+    const itemBox = document.getElementById('itemBox');
+
+    addItemBtn.addEventListener('click', () => {
+        formContainer.classList.toggle('active');  // Show/hide form
+    });
+
+    saveBtn.addEventListener('click', () => {
+        const imageFile = imageInput.files[0];
+        const title = titleInput.value;
+
+        if (imageFile && title) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const itemDiv = document.createElement('div');
+                itemDiv.classList.add('item');
+
+                const imgElement = document.createElement('img');
+                imgElement.src = e.target.result;
+
+                const titleElement = document.createElement('p');
+                titleElement.classList.add('item-title');
+                titleElement.textContent = title;
+
+                itemDiv.appendChild(imgElement);
+                itemDiv.appendChild(titleElement);
+                itemBox.appendChild(itemDiv);
+
+                // Reset the form
+                imageInput.value = '';
+                titleInput.value = '';
+                formContainer.classList.remove('active');
+            };
+
+            reader.readAsDataURL(imageFile);
+        } else {
+            alert("Please fill out both fields.");
+        }
+    });
+</script>
+
+</body>
+</html>

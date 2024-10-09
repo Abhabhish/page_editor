@@ -1,0 +1,37 @@
+{% extends "base.html" %} {% load humanize %} {% block pageContent %}
+
+<!--Section: Content-->
+<div>
+<section class="text">
+    <h1 class="mb-5"><strong>
+            <center>{{section.title}}</center>
+        </strong></h4>
+
+        <div class="container">
+            {% for folder in root_folders %}
+            <div class="row align-items-center mb-3 p-2 border shadow-sm">
+                <!-- Left: Section logo -->
+                <div class="col-auto">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3767/3767084.png" alt="Logo" class="img-fluid"
+                        style="width: 25px; height: auto;" />
+                </div>
+
+                <!-- Middle: Section title -->
+                <div class="col">
+                    <a href="{% url 'folder_view' folder_id=folder.id %}">
+                        <h5 class="mb-0"><strong>{{ folder.name }}</strong></h5>
+                    </a>
+                </div>
+
+                <!-- Right: Edit and Delete buttons -->
+                <div class="col-auto">
+                    <a href="{% url 'edit-folder' folder_id=folder.id %}" class="btn btn-primary btn-sm me-2">Edit</a>
+                    <a href="{% url 'delete-folder' folder.id %}" class="btn btn-danger btn-sm">Delete</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+</section>
+</div>
+{% endblock pageContent %}

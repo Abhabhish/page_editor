@@ -1,0 +1,64 @@
+{% extends "base.html" %} {% load humanize %} {% block pageContent %}
+<div>
+<!--Section: Content-->
+
+<h1 class="mb-5"><strong>
+    <center>{{folder.name}}</center>
+</strong></h1>
+<section class="text">
+    <h4 class="mb-5"><strong>Folders</strong></h4>
+        <div class="container">
+            {% for s in subfolders %}
+            <div class="row align-items-center mb-3 p-2 border shadow-sm">
+                <!-- Left: Section logo -->
+                <div class="col-auto">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3767/3767084.png" alt="Logo" class="img-fluid"
+                        style="width: 25px; height: auto;" />
+                </div>
+                <!-- Middle: Section title -->
+                <div class="col">
+                    <a href="{% url 'folder_view' folder_id=s.id %}">
+                        <h5 class="mb-0"><strong>{{ s.name }}</strong></h5>
+                    </a>
+                </div>
+
+                <!-- Right: Edit and Delete buttons -->
+                <div class="col-auto">
+                    <a href="{% url 'edit-folder' folder_id=s.id %}" class="btn btn-primary btn-sm me-2">Edit</a>
+                    <a href="{% url 'delete-folder' s.id %}" class="btn btn-danger btn-sm">Delete</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+</section>
+<br><br>
+
+<section class="text">
+    <h4 class="mb-5"><strong>Pages</strong></h4>
+        <div class="container">
+            {% for post in posts %}
+            <div class="row align-items-center mb-3 p-2 border shadow-sm">
+                <!-- Left: Section logo -->
+                <div class="col-auto">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1250/1250680.png" alt="Logo" class="img-fluid"
+                        style="width: 25px; height: auto;" />
+                </div>
+                <!-- Middle: Section title -->
+                <div class="col">
+                    <a href="{% url 'edit-post' pk=post.id lang='English'%}">
+                        <h5 class="mb-0"><strong>{{ post.page_name }}</strong></h5>
+                    </a>
+                </div>
+
+                <!-- Right: Edit and Delete buttons -->
+                <div class="col-auto">
+                    <a href="{% url 'edit-post' pk=post.id lang='English'%}" class="btn btn-primary btn-sm me-2">Edit</a>
+                    <a href="{% url 'delete-post' post.id %}" class="btn btn-danger btn-sm">Delete</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+</section>
+
+
+</div> {% endblock pageContent %}

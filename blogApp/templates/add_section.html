@@ -1,0 +1,103 @@
+{% extends 'base.html' %} {% load static %}{% block headerContent %}
+<link rel="stylesheet" href="{% static 'blogApp/assets/summernote/summernote-lite.min.css' %}">
+<script src="{% static 'blogApp/assets/summernote/summernote-lite.min.js' %}"></script>
+{% endblock headerContent %} {% block pageContent %}
+
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="row justify-content-center">
+        <div class=" col-lg-12 col-md-12 col-sm-12 col-xs-12 card card-default rounded-0 shadow">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="card-title fw-bold">Add New Section</h4>
+            </div>
+            <div class="card-body">
+                <form action="" id="post-form">
+                    {% csrf_token %}
+                    <div class="form-group mb-3">
+                        <label for="title" class="control-label">Title</label>
+                        <input type="text" class="form-control rounded-0" id="title" name="title" value="" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <center><img src="{{ MEDIA_URL }}/media/default/default.png" id="post-banner-mgt" alt="" class="img-fluid img-thumbnail bg-gradient bg-dark"></center>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="theme" class="control-label">Select Theme</label>
+                        <input type="file" class="form-control rounded-0" name="theme" id="theme" accept="image/*" required onchange="DisplayImage(this)">
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer">
+                <div class="d-flex w-100 justify-content-end">
+                    <button class="btn btn-sm btn-primary bg-gradient me-2 rounded-0" form="post-form"><i class="fa fa-save"></i> Save</button>
+                    <a class="btn btn-sm btn-light bg-gradient border rounded-0" href="{% url 'sections-page' %}"><i class="fa fa-angle-left"></i> Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock pageContent %} {% block ScriptBlock %}
+<script>
+    function DisplayImage(input) {
+        console.log(input.files)
+        if (event.target.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function() {
+                var output = $('#post-banner-mgt');
+                output.attr('src', reader.result)
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+
+    };
+    $(function() {
+        $('#post-form').submit(function(e) {
+            e.preventDefault();
+            var _this = $(this)
+            $('.err-msg').remove();
+            var el = $('<div>')
+            el.addClass("alert alert-danger err-msg")
+            el.hide()
+            if (_this[0].checkValidity() == false) {
+                _this[0].reportValidity();
+                return false;
+            }
+            start_loader();
+            $.ajax({
+                headers: {
+                    "X-CSRFToken": '{{csrf_token}}'
+                },
+                url: "{% url 'save-section' %}",
+                data: new FormData($(this)[0]),
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                dataType: 'json',
+                error: err => {
+                    console.log(err)
+                    alert_toast("An error occured", 'error');
+                    end_loader();
+                },
+                success: function(resp) {
+                    if (typeof resp == 'object' && resp.status == 'success') {
+                        el.removeClass("alert alert-danger err-msg")
+                        location.replace("{% url 'sections-page' %}");
+                    } else if (resp.status == 'failed' && !!resp.msg) {
+                        el.html(resp.msg)
+                    } else {
+                        el.text("An error occured", 'error');
+                        end_loader();
+                        console.err(resp)
+                    }
+                    _this.prepend(el)
+                    el.show('slow')
+                    $("html, body, .modal").scrollTop(0);
+                    end_loader()
+                }
+            })
+        })
+    })
+</script>
+{% endblock ScriptBlock %}
