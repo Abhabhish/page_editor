@@ -311,6 +311,16 @@ def create_post(request, folder_id):
             static_table=static_table,
             dynamic_table=dynamic_table
         )
+        i=0
+        print(request.POST)
+        while f'map_name_{i}' in request.POST:
+            map_name = request.POST.get(f'map_name_{i}')
+            map_thumbnail_name = request.POST.get(f'map_thumbnail_{i}')
+            map_alt = request.POST.get(f'map_alt_{i}')
+            print(map_name)
+            print(map_thumbnail_name)
+            print(map_alt)
+            i+=1
         return redirect('edit-post', lang='English', pk=new_post.id)
     return render(request, 'create_post.html', {
         'folder': folder,

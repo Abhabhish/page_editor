@@ -41,6 +41,7 @@ urlpatterns = [
 
 
 
+
     path('section/<int:section_id>/create-folder/', views.create_folder, name='create_folder_in_section'),
     path('section/<int:section_id>/create-folder/<int:parent_folder_id>/', views.create_folder, name='create_subfolder'),
 

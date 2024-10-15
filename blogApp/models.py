@@ -103,7 +103,7 @@ class Post(models.Model):
 
 
 class OtherMaps(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='images')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='images',null=True)
     map_name = models.CharField(max_length=200)
     thumbnail = models.ImageField()
     alt = models.CharField(max_length=200)
